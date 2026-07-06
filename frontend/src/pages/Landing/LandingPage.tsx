@@ -23,7 +23,6 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = useState<"ocr" | "trends" | "ai">("ocr");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Features List
   const features = [
     {
       icon: <UploadCloud className="text-blue-500" size={26} />,
@@ -57,7 +56,6 @@ export default function LandingPage() {
     },
   ];
 
-  // How It Works Steps
   const steps = [
     {
       num: "01",
@@ -85,8 +83,6 @@ export default function LandingPage() {
     },
   ];
 
-
-  // FAQs
   const faqs = [
     {
       q: "Is MedIntel AI HIPAA compliant?",
@@ -106,19 +102,11 @@ export default function LandingPage() {
     },
   ];
 
-  const toggleFaq = (idx: number) => {
-    setOpenFaq(openFaq === idx ? null : idx);
-  };
-
   return (
     <div className="flex-1 w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      {/* Navigation Header */}
       <Navbar />
-
-      {/* Hero Presentation */}
       <Hero />
 
-      {/* Features Grid Section */}
       <section id="features" className="py-24 px-6 md:px-12 w-full bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800/50">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
@@ -164,7 +152,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How It Works Timeline */}
       <section id="how-it-works" className="py-24 px-6 md:px-12 w-full grid-bg dark:grid-bg-dark">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
@@ -195,11 +182,9 @@ export default function LandingPage() {
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
                 className="relative p-6 rounded-2xl bg-white border border-slate-100 dark:bg-slate-900 dark:border-slate-800 flex flex-col text-left space-y-4 shadow-sm"
               >
-                {/* Connector Line (visible on desktop) */}
                 {idx < 3 && (
                   <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-[2px] bg-slate-200 dark:bg-slate-800 z-0"></div>
                 )}
-                
                 <div className="flex items-center justify-between">
                   <div className="h-10 w-10 rounded-lg bg-blue-50 dark:bg-blue-950 flex items-center justify-center">
                     {step.icon}
@@ -208,7 +193,6 @@ export default function LandingPage() {
                     {step.num}
                   </span>
                 </div>
-
                 <h3 className="text-base font-bold font-heading text-slate-900 dark:text-white">
                   {step.title}
                 </h3>
@@ -221,7 +205,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Interactive Tabs Mock Dashboard View */}
       <section id="preview" className="py-24 px-6 md:px-12 w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -233,7 +216,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Interactive Navigation Tab buttons */}
           <div className="flex justify-center mb-8">
             <div className="inline-flex p-1 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800">
               {[
@@ -256,7 +238,6 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Screen Content Container with animations */}
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-8 dark:border-slate-800 dark:bg-slate-950/40 max-w-5xl mx-auto shadow-inner">
             <AnimatePresence mode="wait">
               {activeTab === "ocr" && (
@@ -268,7 +249,6 @@ export default function LandingPage() {
                   transition={{ duration: 0.3 }}
                   className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch"
                 >
-                  {/* Left: Simulated upload page */}
                   <div className="lg:col-span-5 rounded-2xl border-2 border-dashed border-slate-200 bg-white p-8 flex flex-col items-center justify-center text-center dark:border-slate-800 dark:bg-slate-950/60 min-h-[300px]">
                     <div className="h-14 w-14 rounded-full bg-blue-50 dark:bg-blue-950 flex items-center justify-center mb-4">
                       <UploadCloud className="text-blue-600 dark:text-blue-400" size={28} />
@@ -284,7 +264,6 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  {/* Right: Simulated table result */}
                   <div className="lg:col-span-7 rounded-2xl bg-white border border-slate-200/60 p-6 dark:bg-slate-900 dark:border-slate-800 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
@@ -349,15 +328,12 @@ export default function LandingPage() {
                     </span>
                   </div>
 
-                  {/* Mock Recharts graph representation using CSS */}
                   <div className="h-44 w-full relative flex items-end justify-between px-6 pt-4 bg-slate-50 dark:bg-slate-950/40 rounded-xl border border-slate-100 dark:border-slate-800/50">
-                    {/* Graph grid lines */}
                     <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
                       <div className="w-full border-t border-slate-400"></div>
                       <div className="w-full border-t border-slate-400"></div>
                       <div className="w-full border-t border-slate-400"></div>
                     </div>
-                    {/* Graph Bars */}
                     {[
                       { date: "June 25", val: 148, h: "h-[85%]", color: "bg-red-500" },
                       { date: "Oct 25", val: 135, h: "h-[75%]", color: "bg-red-400" },
@@ -375,9 +351,8 @@ export default function LandingPage() {
                       </div>
                     ))}
                   </div>
-
                   <p className="text-xs text-slate-500 leading-relaxed text-left">
-                    💡 **Analysis:** Fasting glucose has dropped from 148 to 110 mg/dL over the past 12 months. This represents a favorable response to therapeutic lifestyle adjustments (cardiovascular training, low glycemic index foods).
+                    💡 **Analysis:** Fasting glucose has dropped from 148 to 110 mg/dL over the past 12 months. This represents a favorable response to therapeutic lifestyle adjustments.
                   </p>
                 </motion.div>
               )}
@@ -391,7 +366,6 @@ export default function LandingPage() {
                   transition={{ duration: 0.3 }}
                   className="rounded-2xl bg-white border border-slate-200/60 p-6 dark:bg-slate-900 dark:border-slate-800 flex flex-col space-y-4"
                 >
-                  {/* Chat header */}
                   <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div className="flex items-center gap-2.5">
                       <div className="h-8 w-8 rounded-lg bg-blue-500 text-white flex items-center justify-center">
@@ -409,7 +383,6 @@ export default function LandingPage() {
                     <span className="h-2 w-2 rounded-full bg-green-500"></span>
                   </div>
 
-                  {/* Chat logs */}
                   <div className="space-y-4 h-48 overflow-y-auto pr-2 text-left">
                     <div className="flex gap-2">
                       <div className="h-6 w-6 rounded bg-slate-100 dark:bg-slate-800 text-[10px] flex items-center justify-center font-bold">U</div>
@@ -421,18 +394,17 @@ export default function LandingPage() {
                     <div className="flex gap-2">
                       <div className="h-6 w-6 rounded bg-blue-500 text-white text-[10px] flex items-center justify-center font-bold">AI</div>
                       <div className="bg-blue-50 dark:bg-blue-950/40 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300 max-w-[80%] space-y-1.5">
-                        <p>Total Cholesterol of 245 mg/dL is classified as <strong>borderline high</strong> (Optimal is &lt; 200 mg/dL). It is not an immediate emergency, but increases long-term risk of cardiovascular disease.</p>
-                        <p>I recommend checking your LDL (bad) and HDL (good) cholesterol values to determine your risk balance. Reducing trans fats and exercising 150 min/week will help lower these numbers.</p>
+                        <p>Total Cholesterol of 245 mg/dL is classified as <strong>borderline high</strong>. It is not an immediate emergency, but increases long-term risk of cardiovascular disease.</p>
+                        <p>I recommend checking your LDL and HDL cholesterol values to determine your risk balance. Reducing trans fats and exercising will help lower these numbers.</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Input line */}
                   <div className="relative flex items-center">
                     <input
                       type="text"
                       disabled
-                      placeholder="Ask the AI Medical Assistant... (Disabled in landing demo)"
+                      placeholder="Ask the AI Medical Assistant..."
                       className="w-full rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-xs bg-slate-50 dark:bg-slate-950/20 text-slate-400"
                     />
                     <div className="absolute right-3 p-1.5 rounded-lg bg-blue-500 text-white cursor-not-allowed">
@@ -446,8 +418,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-
-      {/* FAQ Accordion Section */}
       <section id="faqs" className="py-24 px-6 md:px-12 w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800/50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -466,18 +436,14 @@ export default function LandingPage() {
                 className="rounded-2xl border border-slate-200/80 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-950/20 overflow-hidden"
               >
                 <button
-                  onClick={() => toggleFaq(idx)}
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   <span className="text-sm md:text-base font-heading">{faq.q}</span>
-                  <motion.div
-                    animate={{ rotate: openFaq === idx ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
+                  <motion.div animate={{ rotate: openFaq === idx ? 180 : 0 }} transition={{ duration: 0.3 }}>
                     <ChevronDown size={18} className="text-slate-400" />
                   </motion.div>
                 </button>
-
                 <AnimatePresence initial={false}>
                   {openFaq === idx && (
                     <motion.div
@@ -499,13 +465,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Signup Banner */}
       <section className="relative py-24 px-6 md:px-12 w-full overflow-hidden grid-bg dark:grid-bg-dark border-t border-slate-100 dark:border-slate-800/50">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full bg-blue-600/5 blur-[120px] pointer-events-none"></div>
         <div className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-800 px-8 py-16 text-center text-white relative shadow-2xl overflow-hidden">
-          {/* Inner details to give depth */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-60"></div>
-          
           <div className="relative z-10 space-y-6 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-md">
               <Sparkles size={14} className="text-blue-200" />
@@ -541,10 +504,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-16 px-6 md:px-12 w-full bg-slate-900 dark:bg-slate-950 text-slate-400 border-t border-slate-800">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
-          {/* Brand Info */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-400 bg-clip-text text-transparent text-xl font-bold tracking-tight">
               <span>MedIntel</span>
@@ -559,7 +520,6 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Links grid (7 cols) */}
           <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div className="space-y-4">
               <h4 className="text-xs font-bold text-white uppercase tracking-wider">Product</h4>
@@ -569,7 +529,6 @@ export default function LandingPage() {
                 <li><a href="#preview" className="hover:text-white transition-colors">Dashboard Preview</a></li>
               </ul>
             </div>
-            
             <div className="space-y-4">
               <h4 className="text-xs font-bold text-white uppercase tracking-wider">Security</h4>
               <ul className="space-y-2 text-xs">
@@ -578,7 +537,6 @@ export default function LandingPage() {
                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
               </ul>
             </div>
-
             <div className="space-y-4 col-span-2 sm:col-span-1">
               <h4 className="text-xs font-bold text-white uppercase tracking-wider">Target Users</h4>
               <ul className="space-y-2 text-xs">
@@ -590,7 +548,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Copy Line */}
         <div className="max-w-7xl mx-auto pt-12 mt-12 border-t border-slate-800 text-center flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <span>&copy; {new Date().getFullYear()} MedIntel AI Inc. All rights reserved.</span>
           <div className="flex gap-4">
