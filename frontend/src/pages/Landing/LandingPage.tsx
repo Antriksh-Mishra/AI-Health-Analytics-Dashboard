@@ -85,30 +85,6 @@ export default function LandingPage() {
     },
   ];
 
-  // Testimonials
-  const testimonials = [
-    {
-      quote: "MedIntel AI has saved our clinic hours of administrative manual labor. The OCR data extraction has near-perfect accuracy on structured blood tests.",
-      name: "Dr. Adrian Vance, MD",
-      role: "Lead Endocrinologist",
-      company: "Metropolitan Endocrine Center",
-      img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200",
-    },
-    {
-      quote: "For years I've struggled to track my lipids and glucose over time across scattered PDFs. This platform consolidates everything into beautiful trend charts.",
-      name: "Sarah Jenkins",
-      role: "Patient (Type 1 Diabetic)",
-      company: "User since 2025",
-      img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200",
-    },
-    {
-      quote: "The comparison tool is incredible. Being able to run a side-by-side analysis of my blood reports before and after a dietary change changed how I manage my health.",
-      name: "Michael Chen",
-      role: "Health & Fitness Enthusiast",
-      company: "Biohacker community",
-      img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200",
-    },
-  ];
 
   // FAQs
   const faqs = [
@@ -470,60 +446,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-24 px-6 md:px-12 w-full bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800/50">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="space-y-4 max-w-2xl mx-auto mb-16"
-          >
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest bg-blue-50 dark:bg-blue-900/30 px-3.5 py-1.5 rounded-full">
-              Testimonials
-            </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold font-heading text-slate-900 dark:text-white">
-              Trusted by Patients & Clinicians
-            </h2>
-            <p className="text-slate-500 dark:text-slate-400">
-              Read how clinics and health-conscious users are leveraging MedIntel AI to monitor wellness.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((test, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="p-8 rounded-3xl border border-slate-200/60 bg-white shadow-sm dark:border-slate-800/40 dark:bg-slate-900 flex flex-col justify-between text-left space-y-6"
-              >
-                <p className="text-sm italic text-slate-600 dark:text-slate-300 leading-relaxed">
-                  &ldquo;{test.quote}&rdquo;
-                </p>
-                <div className="flex items-center gap-4">
-                  <img
-                    src={test.img}
-                    alt={test.name}
-                    className="h-10 w-10 rounded-full object-cover border border-slate-100 dark:border-slate-800"
-                  />
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                      {test.name}
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {test.role}, <span className="font-semibold">{test.company}</span>
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* FAQ Accordion Section */}
       <section id="faqs" className="py-24 px-6 md:px-12 w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800/50">
