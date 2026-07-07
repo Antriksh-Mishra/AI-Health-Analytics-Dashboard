@@ -16,6 +16,14 @@ frontend/dist
 frontend/node_modules
 frontend/dist-ssr
 
+# Python
+backend/venv/
+*.db
+__pycache__/
+.env
+backend/.env
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
