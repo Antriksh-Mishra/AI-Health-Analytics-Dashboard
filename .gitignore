@@ -22,6 +22,8 @@ backend/venv/
 __pycache__/
 .env
 backend/.env
+backend/uploads/
+
 
 
 # Editor directories and files

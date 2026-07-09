@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/common/Button";
 import Logo from "../../components/common/Logo";
@@ -23,19 +23,19 @@ export default function DashboardPage() {
           <Logo size="sm" />
           
           <nav className="space-y-1">
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+            <Link to="/dashboard" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
               <LayoutDashboard size={18} />
               Overview
-            </button>
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50 cursor-not-allowed" disabled>
+            </Link>
+            <Link to="/reports" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
               <FileText size={18} />
               Medical Reports
-            </button>
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50 cursor-not-allowed" disabled>
+            </Link>
+            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
               <BarChart3 size={18} />
               Analytics
             </button>
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50 cursor-not-allowed" disabled>
+            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
               <Settings size={18} />
               Settings
             </button>

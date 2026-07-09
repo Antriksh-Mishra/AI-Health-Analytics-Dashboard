@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from database.db import db
 from routes.auth import auth_bp
+from routes.reports import reports_bp
 
 # Load environment variables
 load_dotenv()
@@ -18,6 +19,7 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'medintel-secret-key-change-in-prod')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///medintel.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads')
     
     # JWT configuration
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'medintel-jwt-secret-key-change-in-prod')
@@ -31,10 +33,13 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(reports_bp, url_prefix='/api/reports')
 
     # Create tables
     with app.app_context():
-        import models.user  # Ensure model is imported before create_all
+        import models.user
+        import models.report
+        import models.biometric
         db.create_all()
 
     # JWT Error handlers for cleaner API outputs
