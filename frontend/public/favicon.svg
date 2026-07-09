@@ -1,12 +1,93 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="48" height="48" fill="none">
   <defs>
-    <linearGradient id="medintel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6" />
-      <stop offset="100%" stop-color="#4f46e5" />
+    <linearGradient id="medintel-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d2ff" />
+      <stop offset="100%" stop-color="#004e92" />
     </linearGradient>
   </defs>
-  <!-- Rounded square backdrop (gives a modern app icon look) -->
-  <rect width="24" height="24" rx="6" fill="#eff6ff" stroke="#dbeafe" stroke-width="0.75" />
-  <!-- Heartbeat / Activity Pulse line -->
-  <path d="M4 12h3l2-5 3 10 2-8 2 5h4" stroke="url(#medintel-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+  <!-- Crescent Swooshes -->
+  <path
+    d="M 50,6 A 44,44 0 0,1 94,50"
+    stroke="url(#medintel-logo-grad)"
+    stroke-width="4.5"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 50,94 A 44,44 0 0,1 6,50"
+    stroke="url(#medintel-logo-grad)"
+    stroke-width="4.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Rounded Medical Cross -->
+  <rect
+    x="36"
+    y="18"
+    width="28"
+    height="64"
+    rx="9"
+    fill="url(#medintel-logo-grad)"
+  />
+  <rect
+    x="18"
+    y="36"
+    width="64"
+    height="28"
+    rx="9"
+    fill="url(#medintel-logo-grad)"
+  />
+
+  <!-- Heartbeat EKG Pulse Trace (White Line Overlay) -->
+  <path
+    d="M 18,50 L 35,50 L 39,58 L 44,32 L 48,68 L 52,42 L 55,50 L 59,50"
+    stroke="#ffffff"
+    stroke-width="3.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- AI Circuit Board Nodes (White Lines + Circles Overlay) -->
+  <path
+    d="M 59,50 H 63 L 68,43 H 74"
+    stroke="#ffffff"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 59,50 L 66,47 H 77"
+    stroke="#ffffff"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 59,50 H 80"
+    stroke="#ffffff"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 59,50 L 66,53 H 77"
+    stroke="#ffffff"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M 59,50 H 63 L 68,57 H 74"
+    stroke="#ffffff"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Node Endpoint Circles -->
+  <circle cx="75" cy="43" r="2.2" fill="#ffffff" />
+  <circle cx="78" cy="47" r="2.2" fill="#ffffff" />
+  <circle cx="81" cy="50" r="2.2" fill="#ffffff" />
+  <circle cx="78" cy="53" r="2.2" fill="#ffffff" />
+  <circle cx="75" cy="57" r="2.2" fill="#ffffff" />
 </svg>
