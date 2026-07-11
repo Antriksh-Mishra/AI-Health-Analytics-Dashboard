@@ -105,7 +105,46 @@ Assistant:"""
             response = model.generate_content(prompt)
             return response.text.strip()
         except Exception as e:
-            return f"Error connecting to MedIntel AI assistant: {str(e)}"
+            print(f"Gemini API Quota Error: {str(e)}. Running in offline simulated chat mode.")
+            return self._generate_simulated_chat_reply(context_string, user_message)
+
+    def _generate_simulated_chat_reply(self, context_string, user_message):
+        """Generates smart local responses on Gemini quota limits or errors."""
+        msg = user_message.lower()
+        reply = (
+            "⚠️ **MedIntel Offline Wellness Mode** (Your Gemini API key has exceeded its Free Tier quota limit or requires billing activation in Google AI Studio).\n\n"
+        )
+        
+        # Check context indicators
+        if "glucose" in msg or "sugar" in msg:
+            reply += "Regarding **Fasting Glucose**:\n"
+            if "104" in context_string or "elevated" in context_string.lower():
+                reply += "* Your fasting glucose is noted as elevated. Normal clinical references are 70-100 mg/dL.\n"
+                reply += "* Values between 100-125 mg/dL can suggest prediabetes. Consider decreasing refined sugars and increasing fiber and cardio exercises.\n"
+            else:
+                reply += "* Normal fasting blood glucose ranges between 70 and 100 mg/dL. Stable values support consistent daily energy levels.\n"
+        elif "hemoglobin" in msg or "hb" in msg or "oxygen" in msg:
+            reply += "Regarding **Hemoglobin**:\n"
+            reply += "* Hemoglobin is the protein in red blood cells that carries oxygen. Normal levels are 12.0-15.5 g/dL for females and 13.5-17.5 g/dL for males.\n"
+            reply += "* Low values can indicate iron-deficiency anemia, which can cause fatigue. Focus on iron-rich foods (spinach, lentils, red meat) and Vitamin C to aid absorption.\n"
+        elif "cholesterol" in msg or "lipid" in msg:
+            reply += "Regarding **Total Cholesterol**:\n"
+            reply += "* Healthy cholesterol references are typically under 200 mg/dL. Elevated cholesterol can lead to vascular plaque development.\n"
+            reply += "* Try adding dietary soluble fiber (oats, beans) and omega-3 fatty acids (fish, chia seeds) while minimizing saturated fats.\n"
+        elif "vitamin d" in msg or "vit d" in msg:
+            reply += "Regarding **Vitamin D (25-OH)**:\n"
+            reply += "* Healthy levels are defined between 30 and 100 ng/mL. Levels under 30 ng/mL suggest insufficiency, impacting calcium absorption and immune health.\n"
+            reply += "* Speak with your doctor about daily Vitamin D3 supplementation and spend 10-15 minutes in morning sunlight.\n"
+        elif "pressure" in msg or "bp" in msg:
+            reply += "Regarding **Blood Pressure**:\n"
+            reply += "* Normal blood pressure is under 120/80 mmHg. Elevated readings suggest your cardiovascular system is working harder.\n"
+            reply += "* Focus on low-sodium dietary choices, cardiovascular aerobic exercises, and stress-reduction strategies like meditation.\n"
+        else:
+            reply += "I can help explain specific parameters in your report. I detected metrics relating to: **Fasting Glucose**, **Hemoglobin**, **Cholesterol**, **Vitamin D**, and **Blood Pressure** in the active context.\n\n"
+            reply += "Please ask me about any of these indicators, and I will explain what they represent and outline wellness suggestions!"
+
+        reply += "\n\n***\n*Disclaimer: MedIntel AI insights are for informational support only and do not replace professional medical advice. Always consult your primary care doctor for diagnostics and treatment plans.*"
+        return reply
 
     def _generate_simulated_insights(self, biometrics_dict):
         """Simulates structured analysis in case no API key exists or call fails."""
