@@ -45,7 +45,29 @@ class OCRService:
 
     def _extract_from_image(self, file_path):
         try:
-            results = self.reader.readtext(file_path, detail=0)
+            from PIL import Image
+            img = Image.open(file_path)
+            max_size = 1200
+            width, height = img.size
+            
+            # Downscale large images to speed up EasyOCR CPU processing times
+            if width > max_size or height > max_size:
+                ratio = min(max_size / width, max_size / height)
+                new_size = (int(width * ratio), int(height * ratio))
+                img = img.resize(new_size, Image.Resampling.LANCZOS)
+                
+                temp_path = file_path + ".resized.jpg"
+                img.convert("RGB").save(temp_path, "JPEG", quality=85)
+                
+                results = self.reader.readtext(temp_path, detail=0)
+                if os.path.exists(temp_path):
+                    try:
+                        os.remove(temp_path)
+                    except Exception:
+                        pass
+            else:
+                results = self.reader.readtext(file_path, detail=0)
+                
             return "\n".join(results)
         except Exception as e:
             raise RuntimeError(f"Failed to run OCR on image: {str(e)}")
