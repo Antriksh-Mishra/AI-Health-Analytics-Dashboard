@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from database.db import db
 from routes.auth import auth_bp
 from routes.reports import reports_bp
+from routes.ai import ai_bp
 
 # Load environment variables
 load_dotenv()
@@ -34,6 +35,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(reports_bp, url_prefix='/api/reports')
+    app.register_blueprint(ai_bp, url_prefix='/api/ai')
 
     # Create tables
     with app.app_context():
@@ -65,4 +67,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     port = int(os.getenv('PORT', 5001))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)

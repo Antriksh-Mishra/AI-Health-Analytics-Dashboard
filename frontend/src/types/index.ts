@@ -34,6 +34,16 @@ export interface Report {
   file_path: string;
   ocr_status: "pending" | "processing" | "completed" | "failed";
   raw_text: string | null;
+  ai_insights?: {
+    summary: string;
+    flagged_items: Array<{
+      metric: string;
+      value: string;
+      range: string;
+      reason: string;
+    }>;
+    wellness_recommendations: string[];
+  } | null;
   uploaded_at: string;
   user_id: number;
   biometrics: BiometricData[];

@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   User,
   LayoutDashboard,
+  Bot,
   BarChart3,
   Settings,
   LogOut,
@@ -148,6 +149,10 @@ export default function ReportsPage() {
             <Link to="/reports" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
               <FileText size={18} />
               Medical Reports
+            </Link>
+            <Link to="/ai-assistant" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
+              <Bot size={18} />
+              AI Assistant
             </Link>
             <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
               <BarChart3 size={18} />
@@ -402,6 +407,55 @@ export default function ReportsPage() {
                   <p className="text-xs text-slate-400">No biometric values could be isolated.</p>
                 )}
               </div>
+
+              {/* AI Clinical Insights Analysis Card */}
+              {selectedReport.ai_insights && (
+                <div className="p-6 rounded-2xl border border-blue-100 bg-blue-50/20 dark:border-blue-900/30 dark:bg-blue-950/10 space-y-4">
+                  <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                    <Sparkles size={18} className="animate-pulse" />
+                    <h4 className="text-sm font-bold font-heading">MedIntel AI Clinical Insights</h4>
+                  </div>
+                  
+                  {/* Summary */}
+                  <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed text-left">
+                    <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Executive Summary</span>
+                    {selectedReport.ai_insights.summary}
+                  </div>
+
+                  {/* Flagged Items */}
+                  {selectedReport.ai_insights.flagged_items && selectedReport.ai_insights.flagged_items.length > 0 && (
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider block">Clinical Alerts</span>
+                      <div className="grid grid-cols-1 gap-2.5">
+                        {selectedReport.ai_insights.flagged_items.map((item, idx) => (
+                          <div key={idx} className="p-3 rounded-xl bg-red-50/50 dark:bg-red-950/10 border border-red-100 dark:border-red-900/20 text-xs text-left">
+                            <div className="flex justify-between font-bold text-slate-800 dark:text-slate-200 mb-1">
+                              <span>⚠️ {item.metric}</span>
+                              <span className="text-red-600 dark:text-red-400">{item.value} <span className="text-[10px] text-slate-400 font-normal">({item.range})</span></span>
+                            </div>
+                            <p className="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">{item.reason}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recommendations */}
+                  {selectedReport.ai_insights.wellness_recommendations && selectedReport.ai_insights.wellness_recommendations.length > 0 && (
+                    <div className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 text-left">
+                      <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Actionable Recommendations</span>
+                      <ul className="space-y-1 list-none pl-0">
+                        {selectedReport.ai_insights.wellness_recommendations.map((rec, idx) => (
+                          <li key={idx} className="flex gap-2 items-start text-[11px] leading-relaxed">
+                            <span className="text-green-500 font-bold shrink-0">✓</span>
+                            <span>{rec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Raw OCR Text Output */}
               <div>

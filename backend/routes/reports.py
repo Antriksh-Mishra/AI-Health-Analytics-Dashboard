@@ -82,6 +82,24 @@ def upload_report():
         db.session.add(biometric)
         db.session.commit()
         
+        # Pre-cache Gemini AI clinical insights
+        from services.ai_service import AIService
+        ai_service = AIService()
+        biometrics_dict = {
+            'blood_sugar': biometric.blood_sugar,
+            'hemoglobin': biometric.hemoglobin,
+            'cholesterol': biometric.cholesterol,
+            'vitamin_d': biometric.vitamin_d,
+            'systolic_bp': biometric.systolic_bp,
+            'diastolic_bp': biometric.diastolic_bp
+        }
+        try:
+            insights = ai_service.generate_report_insights(raw_text, biometrics_dict)
+            report.ai_insights = insights
+            db.session.commit()
+        except Exception as ai_err:
+            print(f"Failed to generate AI insights during upload: {str(ai_err)}")
+
         return jsonify({
             'message': 'Report uploaded and analyzed successfully',
             'report': report.to_dict()

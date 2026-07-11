@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/common/Button";
 import Logo from "../../components/common/Logo";
-import { LogOut, LayoutDashboard, FileText, BarChart3, Settings, ShieldCheck, User } from "lucide-react";
+import { LogOut, LayoutDashboard, FileText, Bot, BarChart3, Settings, ShieldCheck, User } from "lucide-react";
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -30,6 +30,10 @@ export default function DashboardPage() {
             <Link to="/reports" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
               <FileText size={18} />
               Medical Reports
+            </Link>
+            <Link to="/ai-assistant" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
+              <Bot size={18} />
+              AI Assistant
             </Link>
             <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
               <BarChart3 size={18} />
