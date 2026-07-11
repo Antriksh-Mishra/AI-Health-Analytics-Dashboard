@@ -111,7 +111,7 @@ export default function ReportsPage() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const getStatusBadge = (status: string) => {
