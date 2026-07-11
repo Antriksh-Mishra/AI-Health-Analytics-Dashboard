@@ -110,8 +110,8 @@ export default function ReportsPage() {
   };
 
   const handleLogout = () => {
-    logout();
     navigate("/");
+    logout();
   };
 
   const getStatusBadge = (status: string) => {

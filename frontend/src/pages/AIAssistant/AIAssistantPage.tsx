@@ -91,8 +91,8 @@ export default function AIAssistantPage() {
   };
 
   const handleLogout = () => {
-    logout();
     navigate("/");
+    logout();
   };
 
   const promptChips = [

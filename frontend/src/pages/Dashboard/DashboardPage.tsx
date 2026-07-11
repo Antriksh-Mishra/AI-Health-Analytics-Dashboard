@@ -9,8 +9,8 @@ export default function DashboardPage() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
     navigate("/");
+    logout();
   };
 
   if (!user) return null;
