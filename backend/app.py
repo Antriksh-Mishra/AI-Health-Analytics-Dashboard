@@ -5,13 +5,13 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
+
 from database.db import db
 from routes.auth import auth_bp
 from routes.reports import reports_bp
 from routes.ai import ai_bp
-
-# Load environment variables
-load_dotenv()
 
 def create_app():
     app = Flask(__name__)
