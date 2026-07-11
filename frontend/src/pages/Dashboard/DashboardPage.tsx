@@ -10,7 +10,9 @@ export default function DashboardPage() {
 
   const handleLogout = () => {
     navigate("/");
-    logout();
+    setTimeout(() => {
+      logout();
+    }, 100);
   };
 
   if (!user) return null;

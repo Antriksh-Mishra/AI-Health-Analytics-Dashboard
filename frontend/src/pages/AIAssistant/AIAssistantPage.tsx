@@ -92,7 +92,9 @@ export default function AIAssistantPage() {
 
   const handleLogout = () => {
     navigate("/");
-    logout();
+    setTimeout(() => {
+      logout();
+    }, 100);
   };
 
   const promptChips = [
