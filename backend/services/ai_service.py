@@ -57,7 +57,7 @@ Raw Extract Text Content:
 """
         try:
             model = genai.GenerativeModel("gemini-2.0-flash")
-            response = model.generate_content(prompt)
+            response = model.generate_content(prompt, request_options={"timeout": 10.0})
             text_response = response.text.strip()
             
             # Sanitize markdown code blocks if the model wrapped the JSON
@@ -102,7 +102,7 @@ User: {user_message}
 Assistant:"""
         try:
             model = genai.GenerativeModel("gemini-2.0-flash")
-            response = model.generate_content(prompt)
+            response = model.generate_content(prompt, request_options={"timeout": 10.0})
             return response.text.strip()
         except Exception as e:
             print(f"Gemini API Quota Error: {str(e)}. Running in offline simulated chat mode.")
