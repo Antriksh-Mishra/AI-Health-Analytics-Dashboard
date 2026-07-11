@@ -124,45 +124,39 @@ class OCRService:
                 except Exception:
                     pass
 
-        # Helper to extract first float/int from text line after a match (handles stuck units like "148gdL")
-        def extract_number(line, pattern, is_hemoglobin=False):
-            match = re.search(pattern, line, re.IGNORECASE)
-            if match:
-                # Search for any digits, allowing a dot inside
-                num_match = re.search(r'(\d+(?:\.\d+)?)', line[match.end():])
-                if num_match:
-                    val = float(num_match.group(1))
-                    # Heuristic for hemoglobin: if OCR missed decimal dot (e.g. 14.8 -> 148)
-                    if is_hemoglobin and 40 <= val <= 250:
-                        val = val / 10.0
-                    return val
+        # Proximity-based extraction helper that scans lookahead context to handle multi-line OCR layouts
+        def find_metric_proximity(keywords, range_check=None, is_hemoglobin=False):
+            for kw in keywords:
+                matches = list(re.finditer(re.escape(kw), text, re.IGNORECASE))
+                for match in matches:
+                    start_idx = match.end()
+                    lookahead = text[start_idx:start_idx+80]
+                    num_matches = re.findall(r'(\d+(?:[.,]\d+)?)', lookahead)
+                    for num_str in num_matches:
+                        clean_num = num_str.replace(',', '.')
+                        try:
+                            val = float(clean_num)
+                            
+                            # Prevent matching D3 in suggestion sentences like "Consider Vitamin D3 supplements"
+                            if "D" in kw and val == 3.0 and "d3" in lookahead.lower():
+                                continue
+                                
+                            if is_hemoglobin and 40 <= val <= 250:
+                                val = val / 10.0
+                                
+                            if range_check and not (range_check[0] <= val <= range_check[1]):
+                                continue
+                                
+                            return val
+                        except ValueError:
+                            continue
             return None
 
-        # 2. Extract biometric values line-by-line
-        for line in lines:
-            # Fasting Blood Sugar / Glucose (allow OCR typos like gluccoe, glucse)
-            if metrics['blood_sugar'] is None:
-                val = extract_number(line, r'\b(?:glucose|fasting sugar|fbs|blood sugar|sugar|gluccoe|glucse|gluc|gluco)\b')
-                if val is not None and 30 < val < 500:
-                    metrics['blood_sugar'] = val
-
-            # Hemoglobin (allow hb, hgb, hemoglo)
-            if metrics['hemoglobin'] is None:
-                val = extract_number(line, r'\b(?:hemoglobin|hb|hgb|hemoglo|hemo)\b', is_hemoglobin=True)
-                if val is not None and 4 < val < 25:
-                    metrics['hemoglobin'] = val
-
-            # Cholesterol (allow total cholesterol, lipids, chol, cholest)
-            if metrics['cholesterol'] is None:
-                val = extract_number(line, r'\b(?:cholesterol|total cholesterol|lipids|cholest|chol)\b')
-                if val is not None and 50 < val < 600:
-                    metrics['cholesterol'] = val
-
-            # Vitamin D (allow vit d, 25-oh, calcidiol, and allow typos like 25-OHi)
-            if metrics['vitamin_d'] is None:
-                val = extract_number(line, r'(?:vitamin\s*d|vit\s*d|25-oh[a-z]*|calcidiol)')
-                if val is not None and 1 < val < 200:
-                    metrics['vitamin_d'] = val
+        # 2. Extract biometric values
+        metrics['blood_sugar'] = find_metric_proximity(["Fasting Blood Glucose", "Fasting Glucose", "Fasting Blood Sugar", "Glucose"], range_check=(30, 500))
+        metrics['hemoglobin'] = find_metric_proximity(["Hemoglobin (Hb)", "Hemoglobin", "Hb", "Hgb"], range_check=(4, 25), is_hemoglobin=True)
+        metrics['cholesterol'] = find_metric_proximity(["Total Cholesterol", "Cholesterol", "Cholest", "Chol"], range_check=(50, 600))
+        metrics['vitamin_d'] = find_metric_proximity(["(25-OH)", "Vitamin D", "Vit D", "25-OH"], range_check=(1, 200))
 
         # 3. Blood Pressure parsing (e.g. 120/80 or Blood Pressure: 130/85)
         bp_match = re.search(r'\b(\d{2,3})\s*/\s*(\d{2,3})\b', text)
