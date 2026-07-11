@@ -56,7 +56,7 @@ Raw Extract Text Content:
 {raw_text}
 """
         try:
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-2.0-flash")
             response = model.generate_content(prompt)
             text_response = response.text.strip()
             
@@ -101,7 +101,7 @@ Conversation History:
 User: {user_message}
 Assistant:"""
         try:
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-2.0-flash")
             response = model.generate_content(prompt)
             return response.text.strip()
         except Exception as e:
