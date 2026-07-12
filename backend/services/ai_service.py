@@ -226,3 +226,88 @@ Assistant:"""
             "flagged_items": flagged,
             "wellness_recommendations": recommendations
         })
+
+    def generate_comparison_insights(self, report1, report2):
+        """Generates patient-friendly comparison summary between report1 (older) and report2 (newer)."""
+        if not self.api_key_configured:
+            self._configure_api()
+            
+        if not self.api_key_configured:
+            return self._generate_simulated_comparison(report1, report2)
+            
+        prompt = f"""
+You are MedIntel AI, a clinical medical intelligence analytics engine. Generate a comparative progress overview comparing two patient report measurements.
+
+Report 1 (Older, Date: {report1.get('date')}):
+- Glucose: {report1.get('blood_sugar')} mg/dL
+- Hemoglobin: {report1.get('hemoglobin')} g/dL
+- Vitamin D: {report1.get('vitamin_d')} ng/mL
+- Blood Pressure: {report1.get('bp_display')} mmHg
+
+Report 2 (Newer, Date: {report2.get('date')}):
+- Glucose: {report2.get('blood_sugar')} mg/dL
+- Hemoglobin: {report2.get('hemoglobin')} g/dL
+- Vitamin D: {report2.get('vitamin_d')} ng/mL
+- Blood Pressure: {report2.get('bp_display')} mmHg
+
+Write a patient-friendly comparative progress summary (2-3 paragraphs max). Detail:
+1. What values improved (moving closer to normal references), what stayed the same, and what requires attention.
+2. Direct action advice (dietary, lifestyle, sunlight, hydration) based on the deltas.
+3. Keep the tone clinical, supportive, and non-diagnostic. Emphasize doctor consult for treatment changes.
+"""
+        try:
+            model = genai.GenerativeModel("gemini-2.0-flash")
+            response = model.generate_content(prompt, request_options={"timeout": 10.0})
+            return response.text.strip()
+        except Exception as e:
+            print(f"Gemini Comparison API Error: {str(e)}. Running in simulated offline comparison mode.")
+            return self._generate_simulated_comparison(report1, report2)
+
+    def _generate_simulated_comparison(self, report1, report2):
+        # Simulated comparative insights when Gemini key is rate-limited or missing
+        changes = []
+        
+        # Sugar check
+        s1 = report1.get('blood_sugar')
+        s2 = report2.get('blood_sugar')
+        if s1 is not None and s2 is not None:
+            if s2 < s1:
+                changes.append(f"Fasting sugar levels improved from {s1} to {s2} mg/dL, showing beneficial glycemic progress.")
+            elif s2 > s1:
+                changes.append(f"Fasting sugar level shifted higher from {s1} to {s2} mg/dL, which warrants dietary focus.")
+                
+        # Vit D check
+        d1 = report1.get('vitamin_d')
+        d2 = report2.get('vitamin_d')
+        if d1 is not None and d2 is not None:
+            if d2 > d1:
+                changes.append(f"Vitamin D increased from {d1} to {d2} ng/mL, indicating improved absorption or supplementation compliance.")
+            elif d2 < d1:
+                changes.append(f"Vitamin D decreased from {d1} to {d2} ng/mL, suggesting a need for more morning sunlight exposure or supplement reviews.")
+                
+        # Hb check
+        h1 = report1.get('hemoglobin')
+        h2 = report2.get('hemoglobin')
+        if h1 is not None and h2 is not None:
+            if h2 >= 12.0 and h1 < 12.0:
+                changes.append(f"Hemoglobin recovered from {h1} to {h2} g/dL, indicating stable red blood cell counts.")
+            elif h2 < h1:
+                changes.append(f"Hemoglobin shifted from {h1} to {h2} g/dL.")
+                
+        # BP check
+        sys1 = report1.get('systolic_bp')
+        sys2 = report2.get('systolic_bp')
+        if sys1 is not None and sys2 is not None:
+            if sys2 < sys1:
+                changes.append(f"Blood pressure stabilized from {sys1} mmHg systolic down to {sys2} mmHg systolic.")
+            elif sys2 > sys1:
+                changes.append(f"Blood pressure increased to {sys2} mmHg systolic compared to {sys1} mmHg previously.")
+                
+        summary_intro = f"Comparative progress analysis between {report1.get('date')} and {report2.get('date')}:\n\n"
+        if not changes:
+            summary_intro += "No significant changes were isolated between the two selected test date parameters. Values remain stable."
+        else:
+            summary_intro += " ".join(changes)
+            
+        summary_intro += "\n\nDisclaimer: MedIntel AI insights are for supportive health analysis only. Speak with your primary care doctor regarding specific diagnostic indicators or supplement dosage plans."
+        return summary_intro

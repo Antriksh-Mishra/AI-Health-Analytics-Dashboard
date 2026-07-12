@@ -156,10 +156,10 @@ export default function ReportsPage() {
               <Bot size={18} />
               AI Assistant
             </Link>
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
+            <Link to="/analytics" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
               <BarChart3 size={18} />
-              Analytics (Locked)
-            </button>
+              Analytics
+            </Link>
             <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
               <Settings size={18} />
               Settings (Locked)

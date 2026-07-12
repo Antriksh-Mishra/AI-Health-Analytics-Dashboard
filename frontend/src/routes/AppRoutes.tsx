@@ -9,6 +9,7 @@ import RegisterPage from "../pages/Auth/RegisterPage";
 import DashboardPage from "../pages/Dashboard/DashboardPage";
 import ReportsPage from "../pages/Reports/ReportsPage";
 import AIAssistantPage from "../pages/AIAssistant/AIAssistantPage";
+import AnalyticsPage from "../pages/Analytics/AnalyticsPage";
 
 export default function AppRoutes() {
   return (
@@ -39,6 +40,14 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute>
                 <AIAssistantPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/analytics" 
+            element={
+              <ProtectedRoute>
+                <AnalyticsPage />
               </ProtectedRoute>
             } 
           />
