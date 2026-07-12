@@ -148,3 +148,46 @@ def delete_report(report_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': f'Failed to delete report: {str(e)}'}), 500
+
+
+@reports_bp.route('/analytics', methods=['GET'])
+@jwt_required()
+def get_analytics():
+    current_user_id = int(get_jwt_identity())
+    
+    # Query all biometric data records for this user
+    biometrics = BiometricData.query.filter_by(user_id=current_user_id).all()
+    
+    # Sort chronologically by test_date if present, falling back to created_at
+    def get_sort_key(bio):
+        return bio.test_date if bio.test_date else bio.created_at
+        
+    biometrics_sorted = sorted(biometrics, key=get_sort_key)
+    
+    # Format and serialize chronological data points
+    data_points = []
+    for bio in biometrics_sorted:
+        report = Report.query.get(bio.report_id)
+        filename = report.filename if report else "Unknown Report"
+        
+        record_date = bio.test_date if bio.test_date else bio.created_at
+        date_str = record_date.strftime("%Y-%m-%d")
+        
+        bp_str = f"{bio.systolic_bp}/{bio.diastolic_bp}" if bio.systolic_bp and bio.diastolic_bp else None
+        
+        data_points.append({
+            'id': bio.id,
+            'report_id': bio.report_id,
+            'filename': filename,
+            'date': date_str,
+            'hemoglobin': bio.hemoglobin,
+            'blood_sugar': bio.blood_sugar,
+            'cholesterol': bio.cholesterol,
+            'vitamin_d': bio.vitamin_d,
+            'systolic_bp': bio.systolic_bp,
+            'diastolic_bp': bio.diastolic_bp,
+            'bp_display': bp_str,
+            'extra_metrics': bio.get_json_data()
+        })
+        
+    return jsonify(data_points), 200
