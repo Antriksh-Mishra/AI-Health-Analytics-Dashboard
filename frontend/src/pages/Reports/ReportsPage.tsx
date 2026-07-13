@@ -476,8 +476,21 @@ export default function ReportsPage() {
                           </div>
                         </div>
 
+                        {/* Thyroid (TSH) */}
+                        <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 dark:border-slate-800/60 dark:bg-slate-950/20 flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-500">
+                            <Activity size={18} />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 font-semibold block uppercase">Thyroid (TSH)</span>
+                            <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200">
+                              {formatValue(bio.tsh, "µIU/mL")}
+                            </span>
+                          </div>
+                        </div>
+
                         {/* Blood Pressure */}
-                        <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 dark:border-slate-800/60 dark:bg-slate-950/20 flex items-center gap-3 sm:col-span-2">
+                        <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 dark:border-slate-800/60 dark:bg-slate-950/20 flex items-center gap-3">
                           <div className="h-10 w-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
                             <Heart size={18} />
                           </div>

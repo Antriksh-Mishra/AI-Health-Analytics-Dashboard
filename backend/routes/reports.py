@@ -74,6 +74,7 @@ def upload_report():
             blood_sugar=parsed.get('blood_sugar'),
             cholesterol=parsed.get('cholesterol'),
             vitamin_d=parsed.get('vitamin_d'),
+            tsh=parsed.get('tsh'),
             systolic_bp=parsed.get('systolic_bp'),
             diastolic_bp=parsed.get('diastolic_bp')
         )
@@ -90,6 +91,7 @@ def upload_report():
             'hemoglobin': biometric.hemoglobin,
             'cholesterol': biometric.cholesterol,
             'vitamin_d': biometric.vitamin_d,
+            'tsh': biometric.tsh,
             'systolic_bp': biometric.systolic_bp,
             'diastolic_bp': biometric.diastolic_bp
         }

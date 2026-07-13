@@ -50,6 +50,7 @@ Active Biometric Metrics Isolated:
 - Hemoglobin: {biometrics_dict.get('hemoglobin')} g/dL (Normal: 13.5-17.5 for males, 12.0-15.5 for females)
 - Total Cholesterol: {biometrics_dict.get('cholesterol')} mg/dL (Normal: <200)
 - Vitamin D (25-OH): {biometrics_dict.get('vitamin_d')} ng/mL (Normal: 30-100)
+- Thyroid (TSH): {biometrics_dict.get('tsh')} µIU/mL (Normal: 0.40-4.50)
 - Blood Pressure: {biometrics_dict.get('systolic_bp')}/{biometrics_dict.get('diastolic_bp')} mmHg (Normal: 120/80)
 
 Raw Extract Text Content:
@@ -123,7 +124,8 @@ Assistant:"""
             reply += "1. **Fasting Glucose**: Reflects your blood sugar regulation after an overnight fast. Normal values are 70–100 mg/dL. Elevated glucose can indicate prediabetes or insulin resistance, which shifts energy levels and increases cardiovascular workloads.\n"
             reply += "2. **Hemoglobin**: The vital oxygen-carrying protein in red blood cells. Normal range is 12.0–15.5 g/dL (females) and 13.5–17.5 g/dL (males). Lower values indicate iron deficiencies or fatigue risks.\n"
             reply += "3. **Vitamin D (25-OH)**: Controls bone density, calcium absorption, and immune response. Target levels are 30–100 ng/mL. Deficiencies are highly common and can impact overall mood and muscle recovery.\n"
-            reply += "4. **Blood Pressure**: Measures the force of blood flow on arterial walls. Normal values are under 120/80 mmHg. Managing this reduces long-term cardiac strain.\n\n"
+            reply += "4. **Thyroid (TSH)**: Controls systemic metabolic rate, energy, and hormonal feedback. Target reference is 0.40–4.50 µIU/mL. Out-of-range TSH indicates hypo- or hyperthyroid states.\n"
+            reply += "5. **Blood Pressure**: Measures the force of blood flow on arterial walls. Normal values are under 120/80 mmHg. Managing this reduces long-term cardiac strain.\n\n"
             reply += "**Next Steps**: Consult the interactive **Analytics** page to track how these values are trending over time, and download the formatted PDF to share with your primary care provider."
 
         # 2. Blood Pressure Check
@@ -150,7 +152,19 @@ Assistant:"""
             reply += "* **Dietary Intake**: Focus on foods rich in Vitamin D, including fatty fish (salmon, mackerel, sardines), beef liver, egg yolks, and fortified cereals or milk.\n"
             reply += "* **Co-Factor Support**: Ensure adequate magnesium and Vitamin K2 intake, as they assist in activating and directing calcium into the bones."
 
-        # 4. Fasting Glucose / Blood Sugar Check
+        # 4. Thyroid (TSH) Check
+        elif "thyroid" in msg or "tsh" in msg:
+            reply += "### 🦋 Thyroid (TSH) General Effects & Reference Guide:\n"
+            reply += "Thyroid Stimulating Hormone (TSH) regulates metabolic rate. Healthy references are **0.40 to 4.50 µIU/mL**:\n\n"
+            reply += "**General Physiological Effects of Out-of-Range TSH:**\n"
+            reply += "* **High TSH (> 4.5 µIU/mL)**: Suggests *Hypothyroidism* (underactive thyroid), leading to fatigue, weight gain, feeling cold, and mental fog.\n"
+            reply += "* **Low TSH (< 0.4 µIU/mL)**: Suggests *Hyperthyroidism* (overactive thyroid), causing rapid pulse, anxiety, tremors, and heat sensitivity.\n\n"
+            reply += "**Actionable Wellness Suggestions for Thyroid Support:**\n"
+            reply += "* **Incorporate Co-Factors**: Support thyroid hormone synthesis with dietary Selenium (brazil nuts), Zinc (seeds, legumes), and Iodine (seafood, iodized salt).\n"
+            reply += "* **Manage Adrenal Stress**: Elevated cortisol inhibits active thyroid hormone conversion. Prioritize sleep and stress-reduction routines.\n"
+            reply += "* **Clinical Consult**: Verify findings with free T3/T4 thyroid panels through your doctor."
+
+        # 5. Fasting Glucose / Blood Sugar Check
         elif "glucose" in msg or "sugar" in msg or "fasting" in msg:
             reply += "### 🍬 Fasting Glucose General Effects & Reference Guide:\n"
             reply += "Fasting glucose measures the concentration of sugar in your bloodstream after an 8-12 hour fast. Reference levels:\n\n"
@@ -168,8 +182,8 @@ Assistant:"""
 
         # Default fallback
         else:
-            reply += "I can help explain specific parameters in your report. I detected metrics relating to: **Fasting Glucose**, **Hemoglobin**, **Cholesterol**, **Vitamin D**, and **Blood Pressure** in the active context.\n\n"
-            reply += "Please ask me about any of these indicators (e.g. *'Explain my overall reports'*, *'Check my Blood Pressure'*, *'How to improve Vitamin D'*, or *'Fasting Glucose query'*), and I will explain what they represent and outline wellness suggestions!"
+            reply += "I can help explain specific parameters in your report. I detected metrics relating to: **Fasting Glucose**, **Hemoglobin**, **Cholesterol**, **Vitamin D**, **Thyroid (TSH)**, and **Blood Pressure** in the active context.\n\n"
+            reply += "Please ask me about any of these indicators (e.g. *'Explain my overall reports'*, *'Check my Blood Pressure'*, *'How to improve Vitamin D'*, *'Thyroid (TSH) query'*, or *'Fasting Glucose query'*), and I will explain what they represent and outline wellness suggestions!"
 
         reply += "\n\n***\n*Disclaimer: MedIntel AI insights are for informational support only and do not replace professional medical advice. Always consult your primary care doctor for diagnostics and treatment plans.*"
         return reply
@@ -239,6 +253,25 @@ Assistant:"""
                 })
                 recommendations.append("Reduce sodium (salt) intake and manage chronic stressors.")
 
+        tsh = biometrics_dict.get('tsh')
+        if tsh:
+            if tsh > 4.50:
+                flagged.append({
+                    "metric": "Thyroid (TSH)",
+                    "value": f"{tsh} µIU/mL",
+                    "range": "0.40 - 4.50 µIU/mL",
+                    "reason": "Elevated TSH suggests Hypothyroidism (underactive thyroid). It can lead to fatigue, weight gain, feeling cold, and muscle stiffness."
+                })
+                recommendations.append("Discuss possible thyroid support therapies and check active Free T4/T3 levels with your primary care provider.")
+            elif tsh < 0.40:
+                flagged.append({
+                    "metric": "Thyroid (TSH)",
+                    "value": f"{tsh} µIU/mL",
+                    "range": "0.40 - 4.50 µIU/mL",
+                    "reason": "Suppressed TSH suggests Hyperthyroidism (overactive thyroid). It can cause rapid pulse rates, anxiety, heat intolerance, and sleep disruptions."
+                })
+                recommendations.append("Seek clinical reviews for thyroid suppressive options and assess thyroid vascular structures.")
+
         if not recommendations:
             recommendations.append("Maintain your balanced hydration and regular clinical checkups.")
         recommendations.append("Schedule a follow-up consultation with your primary physician to discuss these results.")
@@ -270,12 +303,14 @@ Report 1 (Older, Date: {report1.get('date')}):
 - Glucose: {report1.get('blood_sugar')} mg/dL
 - Hemoglobin: {report1.get('hemoglobin')} g/dL
 - Vitamin D: {report1.get('vitamin_d')} ng/mL
+- Thyroid (TSH): {report1.get('tsh')} µIU/mL
 - Blood Pressure: {report1.get('bp_display')} mmHg
 
 Report 2 (Newer, Date: {report2.get('date')}):
 - Glucose: {report2.get('blood_sugar')} mg/dL
 - Hemoglobin: {report2.get('hemoglobin')} g/dL
 - Vitamin D: {report2.get('vitamin_d')} ng/mL
+- Thyroid (TSH): {report2.get('tsh')} µIU/mL
 - Blood Pressure: {report2.get('bp_display')} mmHg
 
 Write a patient-friendly comparative progress summary (2-3 paragraphs max). Detail:
@@ -330,6 +365,17 @@ Write a patient-friendly comparative progress summary (2-3 paragraphs max). Deta
                 changes.append(f"Blood pressure stabilized from {sys1} mmHg systolic down to {sys2} mmHg systolic.")
             elif sys2 > sys1:
                 changes.append(f"Blood pressure increased to {sys2} mmHg systolic compared to {sys1} mmHg previously.")
+
+        # TSH check
+        t1 = report1.get('tsh')
+        t2 = report2.get('tsh')
+        if t1 is not None and t2 is not None:
+            if 0.4 <= t2 <= 4.5 and (t1 < 0.4 or t1 > 4.5):
+                changes.append(f"Thyroid TSH level normalized to {t2} µIU/mL compared to {t1} µIU/mL previously.")
+            elif t2 > t1:
+                changes.append(f"Thyroid TSH level shifted higher from {t1} to {t2} µIU/mL, suggesting slower metabolic activities.")
+            elif t2 < t1:
+                changes.append(f"Thyroid TSH level shifted lower from {t1} to {t2} µIU/mL, suggesting accelerated metabolic activities.")
                 
         summary_intro = f"Comparative progress analysis between {report1.get('date')} and {report2.get('date')}:\n\n"
         if not changes:

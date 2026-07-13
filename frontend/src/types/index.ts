@@ -28,6 +28,7 @@ export interface BiometricData {
   blood_sugar: number | null;
   cholesterol: number | null;
   vitamin_d: number | null;
+  tsh: number | null;
   systolic_bp: number | null;
   diastolic_bp: number | null;
   extra_metrics: Record<string, any>;

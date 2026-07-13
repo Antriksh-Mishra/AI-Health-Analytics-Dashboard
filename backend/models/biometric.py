@@ -15,6 +15,7 @@ class BiometricData(db.Model):
     blood_sugar = db.Column(db.Float, nullable=True)  # mg/dL
     cholesterol = db.Column(db.Float, nullable=True)  # mg/dL
     vitamin_d = db.Column(db.Float, nullable=True)  # ng/mL
+    tsh = db.Column(db.Float, nullable=True)  # µIU/mL
     systolic_bp = db.Column(db.Integer, nullable=True)  # mmHg
     diastolic_bp = db.Column(db.Integer, nullable=True)  # mmHg
     
@@ -41,6 +42,7 @@ class BiometricData(db.Model):
             'blood_sugar': self.blood_sugar,
             'cholesterol': self.cholesterol,
             'vitamin_d': self.vitamin_d,
+            'tsh': self.tsh,
             'systolic_bp': self.systolic_bp,
             'diastolic_bp': self.diastolic_bp,
             'extra_metrics': self.get_json_data(),

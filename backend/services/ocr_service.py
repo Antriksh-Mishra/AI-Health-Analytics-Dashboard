@@ -80,6 +80,7 @@ class OCRService:
             'blood_sugar': None,
             'cholesterol': None,
             'vitamin_d': None,
+            'tsh': None,
             'systolic_bp': None,
             'diastolic_bp': None,
             'extra_metrics': {}
@@ -155,8 +156,9 @@ class OCRService:
         # 2. Extract biometric values
         metrics['blood_sugar'] = find_metric_proximity(["Fasting Blood Glucose", "Fasting Glucose", "Fasting Blood Sugar", "Glucose"], range_check=(30, 500))
         metrics['hemoglobin'] = find_metric_proximity(["Hemoglobin (Hb)", "Hemoglobin", "Hb", "Hgb"], range_check=(4, 25), is_hemoglobin=True)
-        metrics['cholesterol'] = find_metric_proximity(["Total Cholesterol", "Cholesterol", "Cholest", "Chol"], range_check=(50, 600))
+        metrics['cholesterol'] = find_metric_proximity(["Cholesterol, Total", "Total Cholesterol", "Cholesterol", "Cholest", "Chol"], range_check=(50, 600))
         metrics['vitamin_d'] = find_metric_proximity(["(25-OH)", "Vitamin D", "Vit D", "25-OH"], range_check=(1, 200))
+        metrics['tsh'] = find_metric_proximity(["TSH", "Thyroid Stimulating Hormone", "Thyroid"], range_check=(0.01, 50.0))
 
         # 3. Blood Pressure parsing (e.g. 120/80 or Blood Pressure: 130/85)
         bp_match = re.search(r'\b(\d{2,3})\s*/\s*(\d{2,3})\b', text)

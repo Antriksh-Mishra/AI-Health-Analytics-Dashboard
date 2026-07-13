@@ -37,6 +37,7 @@ interface Report {
     blood_sugar: number | null;
     cholesterol: number | null;
     vitamin_d: number | null;
+    tsh: number | null;
     systolic_bp: number | null;
     diastolic_bp: number | null;
     test_date: string | null;
@@ -508,6 +509,16 @@ export default function AnalyticsPage() {
                             const diff = v2 - v1;
                             const text = diff > 0 ? `+${diff.toFixed(0)} ng/mL` : `${diff.toFixed(0)} ng/mL`;
                             return { text, positive: diff >= 0 }; // increase Vitamin D is positive
+                          }
+                        )}
+                        {renderMetricRow(
+                          "Thyroid (TSH)", 
+                          "µIU/mL", 
+                          (r) => r.biometrics[0].tsh,
+                          (v1, v2) => {
+                            const diff = v2 - v1;
+                            const text = diff > 0 ? `+${diff.toFixed(2)} µIU/mL` : `${diff.toFixed(2)} µIU/mL`;
+                            return { text, positive: Math.abs(v2 - 2.45) <= Math.abs(v1 - 2.45) }; // positive if closer to median
                           }
                         )}
                         {renderBPRow()}

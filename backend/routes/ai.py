@@ -38,6 +38,7 @@ def chat_assistant():
                 f"- Hemoglobin: {b.hemoglobin} g/dL\n"
                 f"- Total Cholesterol: {b.cholesterol} mg/dL\n"
                 f"- Vitamin D: {b.vitamin_d} ng/mL\n"
+                f"- Thyroid (TSH): {b.tsh} µIU/mL\n"
                 f"- Blood Pressure: {b.systolic_bp}/{b.diastolic_bp} mmHg\n"
             )
         
@@ -75,6 +76,7 @@ def regenerate_insights(report_id):
             'hemoglobin': b.hemoglobin,
             'cholesterol': b.cholesterol,
             'vitamin_d': b.vitamin_d,
+            'tsh': b.tsh,
             'systolic_bp': b.systolic_bp,
             'diastolic_bp': b.diastolic_bp
         }

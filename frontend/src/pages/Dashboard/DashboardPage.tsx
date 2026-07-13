@@ -44,13 +44,14 @@ interface AnalyticsDataPoint {
   blood_sugar: number | null;
   cholesterol: number | null;
   vitamin_d: number | null;
+  tsh: number | null;
   systolic_bp: number | null;
   diastolic_bp: number | null;
   bp_display: string | null;
   extra_metrics: Record<string, any>;
 }
 
-type MetricType = "blood_sugar" | "hemoglobin" | "vitamin_d" | "bp";
+type MetricType = "blood_sugar" | "hemoglobin" | "vitamin_d" | "tsh" | "bp";
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -118,7 +119,14 @@ export default function DashboardPage() {
   const latestSugar = getLatestMetric("blood_sugar") as { value: number; date: string } | null;
   const latestHb = getLatestMetric("hemoglobin") as { value: number; date: string } | null;
   const latestVitD = getLatestMetric("vitamin_d") as { value: number; date: string } | null;
+  const latestTsh = getLatestMetric("tsh") as { value: number; date: string } | null;
   const latestBP = getLatestMetric("bp") as { systolic: number; diastolic: number; date: string } | null;
+
+  const getTshStatus = (val: number) => {
+    if (val >= 0.40 && val <= 4.50) return { label: "Normal", color: "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/30" };
+    if (val > 4.50) return { label: "Hypothyroid", color: "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30" };
+    return { label: "Hyperthyroid", color: "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900/30" };
+  };
 
   // Status evaluators
   const getSugarStatus = (val: number) => {
@@ -183,6 +191,13 @@ export default function DashboardPage() {
       color: "#eab308",
       gradient: "colorVitD",
       unit: " ng/mL"
+    },
+    tsh: {
+      label: "Thyroid (TSH)",
+      key: "tsh",
+      color: "#8b5cf6",
+      gradient: "colorTsh",
+      unit: " µIU/mL"
     },
     bp: {
       label: "Blood Pressure",
@@ -340,7 +355,7 @@ export default function DashboardPage() {
           <div className="space-y-6">
             
             {/* Latest Indicator Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               
               {/* Glucose Card */}
               <div 
@@ -432,6 +447,36 @@ export default function DashboardPage() {
                 </p>
               </div>
 
+              {/* Thyroid (TSH) Card */}
+              <div 
+                onClick={() => setActiveMetric("tsh")}
+                className={`group cursor-pointer rounded-2xl border p-5 shadow-sm text-left transition-all duration-300 ${
+                  activeMetric === "tsh" 
+                    ? "border-violet-400 dark:border-violet-500 bg-violet-500/[0.03] shadow-violet-100 dark:shadow-none" 
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">
+                    Thyroid (TSH)
+                  </span>
+                  {latestTsh && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 border rounded-full capitalize ${getTshStatus(latestTsh.value).color}`}>
+                      {getTshStatus(latestTsh.value).label}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-3xl font-black font-heading text-slate-900 dark:text-white">
+                    {latestTsh ? latestTsh.value.toFixed(2) : "N/A"}
+                  </span>
+                  <span className="text-xs text-slate-400 font-semibold">µIU/mL</span>
+                </div>
+                <p className="text-[10px] text-slate-400 mt-3 font-medium">
+                  {latestTsh ? `As of ${latestTsh.date}` : "Not detected in records"}
+                </p>
+              </div>
+
               {/* BP Card */}
               <div 
                 onClick={() => setActiveMetric("bp")}
@@ -481,7 +526,7 @@ export default function DashboardPage() {
 
                   {/* Toggle buttons for mobile chart switching */}
                   <div className="inline-flex rounded-xl bg-slate-100 p-1 dark:bg-slate-800/80 gap-0.5">
-                    {(["blood_sugar", "hemoglobin", "vitamin_d", "bp"] as MetricType[]).map((metric) => (
+                    {(["blood_sugar", "hemoglobin", "vitamin_d", "tsh", "bp"] as MetricType[]).map((metric) => (
                       <button
                         key={metric}
                         onClick={() => setActiveMetric(metric)}
@@ -491,7 +536,7 @@ export default function DashboardPage() {
                             : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                         }`}
                       >
-                        {metric === "blood_sugar" ? "Glucose" : metric === "vitamin_d" ? "Vit D" : metric === "bp" ? "BP" : "Hb"}
+                        {metric === "blood_sugar" ? "Glucose" : metric === "vitamin_d" ? "Vit D" : metric === "tsh" ? "TSH" : metric === "bp" ? "BP" : "Hb"}
                       </button>
                     ))}
                   </div>
@@ -530,7 +575,7 @@ export default function DashboardPage() {
                         tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 600 }}
                         axisLine={false}
                         tickLine={false}
-                        domain={activeMetric === 'bp' ? [50, 180] : activeMetric === 'hemoglobin' ? [8, 20] : activeMetric === 'vitamin_d' ? [0, 80] : [60, 200]}
+                        domain={activeMetric === 'bp' ? [50, 180] : activeMetric === 'hemoglobin' ? [8, 20] : activeMetric === 'vitamin_d' ? [0, 80] : activeMetric === 'tsh' ? [0, 10] : [60, 200]}
                       />
                       <Tooltip content={<CustomTooltip />} />
                       
