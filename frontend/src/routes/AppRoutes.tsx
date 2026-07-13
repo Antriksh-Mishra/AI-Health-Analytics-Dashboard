@@ -10,6 +10,7 @@ import DashboardPage from "../pages/Dashboard/DashboardPage";
 import ReportsPage from "../pages/Reports/ReportsPage";
 import AIAssistantPage from "../pages/AIAssistant/AIAssistantPage";
 import AnalyticsPage from "../pages/Analytics/AnalyticsPage";
+import SettingsPage from "../pages/Settings/SettingsPage";
 
 export default function AppRoutes() {
   return (
@@ -48,6 +49,14 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute>
                 <AnalyticsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             } 
           />

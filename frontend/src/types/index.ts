@@ -4,6 +4,12 @@ export interface User {
   first_name: string;
   last_name: string;
   role: "patient" | "doctor";
+  age?: number | null;
+  gender?: string | null;
+  weight?: number | null;
+  height?: number | null;
+  allergies?: string | null;
+  chronic_conditions?: string | null;
   created_at: string;
   updated_at: string;
 }

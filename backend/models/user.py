@@ -14,6 +14,14 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Health Profile Fields
+    age = db.Column(db.Integer, nullable=True)
+    gender = db.Column(db.String(20), nullable=True) # male, female, other
+    weight = db.Column(db.Float, nullable=True) # kg
+    height = db.Column(db.Float, nullable=True) # cm
+    allergies = db.Column(db.Text, nullable=True)
+    chronic_conditions = db.Column(db.Text, nullable=True)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -27,6 +35,12 @@ class User(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'role': self.role,
+            'age': self.age,
+            'gender': self.gender,
+            'weight': self.weight,
+            'height': self.height,
+            'allergies': self.allergies,
+            'chronic_conditions': self.chronic_conditions,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

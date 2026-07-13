@@ -159,10 +159,10 @@ export default function AIAssistantPage() {
               <BarChart3 size={18} />
               Analytics
             </Link>
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
+            <Link to="/settings" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
               <Settings size={18} />
-              Settings (Locked)
-            </button>
+              Settings
+            </Link>
           </nav>
         </div>
 

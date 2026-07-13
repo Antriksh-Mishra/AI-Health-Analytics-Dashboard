@@ -108,8 +108,24 @@ export default function DashboardPage() {
   };
 
   const getHbStatus = (val: number) => {
-    if (val >= 12.0 && val <= 17.5) return { label: "Normal", color: "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/30" };
-    if ((val >= 11.0 && val < 12.0) || (val > 17.5 && val <= 18.5)) return { label: "Warning", color: "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30" };
+    const gender = user?.gender;
+    let minNormal = 12.0;
+    let maxNormal = 17.5;
+    
+    if (gender === "male") {
+      minNormal = 13.5;
+      maxNormal = 17.5;
+    } else if (gender === "female") {
+      minNormal = 12.0;
+      maxNormal = 15.5;
+    }
+
+    if (val >= minNormal && val <= maxNormal) {
+      return { label: "Normal", color: "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/30" };
+    }
+    if ((val >= minNormal - 1.0 && val < minNormal) || (val > maxNormal && val <= maxNormal + 1.0)) {
+      return { label: "Warning", color: "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30" };
+    }
     return { label: "Critical", color: "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900/30" };
   };
 
@@ -208,10 +224,10 @@ export default function DashboardPage() {
               <BarChart3 size={18} />
               Analytics
             </Link>
-            <button className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-400 cursor-not-allowed select-none dark:text-slate-600" disabled>
+            <Link to="/settings" className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50">
               <Settings size={18} />
               Settings
-            </button>
+            </Link>
           </nav>
         </div>
 

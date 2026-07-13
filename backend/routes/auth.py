@@ -81,3 +81,51 @@ def get_me():
         return jsonify({'error': 'User not found'}), 404
         
     return jsonify({'user': user.to_dict()}), 200
+
+
+@auth_bp.route('/profile', methods=['PUT'])
+@jwt_required()
+def update_profile():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(int(current_user_id))
+    
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+        
+    # We import request if it is not imported
+    from flask import request
+    data = request.get_json() or {}
+    
+    # Optional field updates
+    if 'first_name' in data:
+        user.first_name = data['first_name']
+    if 'last_name' in data:
+        user.last_name = data['last_name']
+    if 'age' in data:
+        try:
+            user.age = int(data['age']) if data['age'] is not None else None
+        except ValueError:
+            return jsonify({'error': 'Age must be a valid integer'}), 400
+    if 'gender' in data:
+        user.gender = data['gender']
+    if 'weight' in data:
+        try:
+            user.weight = float(data['weight']) if data['weight'] is not None else None
+        except ValueError:
+            return jsonify({'error': 'Weight must be a valid float value'}), 400
+    if 'height' in data:
+        try:
+            user.height = float(data['height']) if data['height'] is not None else None
+        except ValueError:
+            return jsonify({'error': 'Height must be a valid float value'}), 400
+    if 'allergies' in data:
+        user.allergies = data['allergies']
+    if 'chronic_conditions' in data:
+        user.chronic_conditions = data['chronic_conditions']
+        
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Profile updated successfully', 'user': user.to_dict()}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Failed to update profile: {str(e)}'}), 500
