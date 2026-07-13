@@ -186,6 +186,7 @@ def get_analytics():
             'blood_sugar': bio.blood_sugar,
             'cholesterol': bio.cholesterol,
             'vitamin_d': bio.vitamin_d,
+            'tsh': bio.tsh,
             'systolic_bp': bio.systolic_bp,
             'diastolic_bp': bio.diastolic_bp,
             'bp_display': bp_str,

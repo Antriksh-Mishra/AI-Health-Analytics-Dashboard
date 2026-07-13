@@ -516,9 +516,11 @@ export default function AnalyticsPage() {
                           "µIU/mL", 
                           (r) => r.biometrics[0].tsh,
                           (v1, v2) => {
-                            const diff = v2 - v1;
+                            const val1 = v1 ?? 0;
+                            const val2 = v2 ?? 0;
+                            const diff = val2 - val1;
                             const text = diff > 0 ? `+${diff.toFixed(2)} µIU/mL` : `${diff.toFixed(2)} µIU/mL`;
-                            return { text, positive: Math.abs(v2 - 2.45) <= Math.abs(v1 - 2.45) }; // positive if closer to median
+                            return { text, positive: Math.abs(val2 - 2.45) <= Math.abs(val1 - 2.45) }; // positive if closer to median
                           }
                         )}
                         {renderBPRow()}

@@ -460,7 +460,7 @@ export default function DashboardPage() {
                   <span className="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">
                     Thyroid (TSH)
                   </span>
-                  {latestTsh && (
+                  {latestTsh && latestTsh.value !== undefined && latestTsh.value !== null && (
                     <span className={`text-[10px] font-bold px-2 py-0.5 border rounded-full capitalize ${getTshStatus(latestTsh.value).color}`}>
                       {getTshStatus(latestTsh.value).label}
                     </span>
@@ -468,7 +468,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex items-baseline gap-1.5">
                   <span className="text-3xl font-black font-heading text-slate-900 dark:text-white">
-                    {latestTsh ? latestTsh.value.toFixed(2) : "N/A"}
+                    {latestTsh && latestTsh.value !== undefined && latestTsh.value !== null ? latestTsh.value.toFixed(2) : "N/A"}
                   </span>
                   <span className="text-xs text-slate-400 font-semibold">µIU/mL</span>
                 </div>
