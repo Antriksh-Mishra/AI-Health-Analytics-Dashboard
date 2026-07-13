@@ -8,7 +8,11 @@ import Button from "../common/Button";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved === "dark";
+    return document.documentElement.classList.contains("dark");
+  });
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,8 +23,16 @@ export default function Navbar() {
   }, []);
 
   const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("dark");
+    const nextMode = !darkMode;
+    setDarkMode(nextMode);
+    localStorage.setItem("theme", nextMode ? "dark" : "light");
+    if (nextMode) {
+      document.documentElement.classList.add("dark");
+      document.body.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.classList.remove("dark");
+    }
   };
 
   const navLinks = [

@@ -13,6 +13,8 @@ import {
   LogOut,
   ChevronDown,
   Bookmark,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 import { useAuth } from "../../hooks/useAuth";
@@ -29,6 +31,24 @@ interface ChatMessage {
 export default function AIAssistantPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved;
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  });
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      document.body.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.classList.remove("dark");
+    }
+  };
 
   const [reports, setReports] = useState<Report[]>([]);
   const [selectedReportId, setSelectedReportId] = useState<number | "">("");
@@ -167,6 +187,15 @@ export default function AIAssistantPage() {
         </div>
 
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
+          <button
+            onClick={toggleTheme}
+            type="button"
+            className="flex items-center gap-3 w-full px-4 py-2.5 mb-4 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50 transition-all cursor-pointer text-left"
+          >
+            {theme === "dark" ? <Sun size={18} className="text-amber-500" /> : <Moon size={18} className="text-indigo-500" />}
+            <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+          </button>
+
           <div className="flex items-center gap-3 mb-4 px-2">
             <div className="h-9 w-9 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <User size={16} />

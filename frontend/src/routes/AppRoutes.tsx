@@ -12,7 +12,21 @@ import AIAssistantPage from "../pages/AIAssistant/AIAssistantPage";
 import AnalyticsPage from "../pages/Analytics/AnalyticsPage";
 import SettingsPage from "../pages/Settings/SettingsPage";
 
+import { useEffect } from "react";
+
 export default function AppRoutes() {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add("dark");
+      document.body.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <BrowserRouter>
