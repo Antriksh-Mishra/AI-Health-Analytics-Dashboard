@@ -115,33 +115,61 @@ Assistant:"""
             "⚠️ **MedIntel Offline Wellness Mode** (Your Gemini API key has exceeded its Free Tier quota limit or requires billing activation in Google AI Studio).\n\n"
         )
         
-        # Check context indicators
-        if "glucose" in msg or "sugar" in msg:
-            reply += "Regarding **Fasting Glucose**:\n"
-            if "104" in context_string or "elevated" in context_string.lower():
-                reply += "* Your fasting glucose is noted as elevated. Normal clinical references are 70-100 mg/dL.\n"
-                reply += "* Values between 100-125 mg/dL can suggest prediabetes. Consider decreasing refined sugars and increasing fiber and cardio exercises.\n"
-            else:
-                reply += "* Normal fasting blood glucose ranges between 70 and 100 mg/dL. Stable values support consistent daily energy levels.\n"
-        elif "hemoglobin" in msg or "hb" in msg or "oxygen" in msg:
-            reply += "Regarding **Hemoglobin**:\n"
-            reply += "* Hemoglobin is the protein in red blood cells that carries oxygen. Normal levels are 12.0-15.5 g/dL for females and 13.5-17.5 g/dL for males.\n"
-            reply += "* Low values can indicate iron-deficiency anemia, which can cause fatigue. Focus on iron-rich foods (spinach, lentils, red meat) and Vitamin C to aid absorption.\n"
-        elif "cholesterol" in msg or "lipid" in msg:
-            reply += "Regarding **Total Cholesterol**:\n"
-            reply += "* Healthy cholesterol references are typically under 200 mg/dL. Elevated cholesterol can lead to vascular plaque development.\n"
-            reply += "* Try adding dietary soluble fiber (oats, beans) and omega-3 fatty acids (fish, chia seeds) while minimizing saturated fats.\n"
-        elif "vitamin d" in msg or "vit d" in msg:
-            reply += "Regarding **Vitamin D (25-OH)**:\n"
-            reply += "* Healthy levels are defined between 30 and 100 ng/mL. Levels under 30 ng/mL suggest insufficiency, impacting calcium absorption and immune health.\n"
-            reply += "* Speak with your doctor about daily Vitamin D3 supplementation and spend 10-15 minutes in morning sunlight.\n"
-        elif "pressure" in msg or "bp" in msg:
-            reply += "Regarding **Blood Pressure**:\n"
-            reply += "* Normal blood pressure is under 120/80 mmHg. Elevated readings suggest your cardiovascular system is working harder.\n"
-            reply += "* Focus on low-sodium dietary choices, cardiovascular aerobic exercises, and stress-reduction strategies like meditation.\n"
+        # 1. Overall Reports Check
+        if "overall reports" in msg or "explain reports" in msg or "explain my report" in msg or "summary" in msg:
+            reply += "### 📋 MedIntel Local Report Analysis Summary:\n"
+            reply += "Here is a general clinical explanation of the indicators present in your active health reports:\n\n"
+            
+            reply += "1. **Fasting Glucose**: Reflects your blood sugar regulation after an overnight fast. Normal values are 70–100 mg/dL. Elevated glucose can indicate prediabetes or insulin resistance, which shifts energy levels and increases cardiovascular workloads.\n"
+            reply += "2. **Hemoglobin**: The vital oxygen-carrying protein in red blood cells. Normal range is 12.0–15.5 g/dL (females) and 13.5–17.5 g/dL (males). Lower values indicate iron deficiencies or fatigue risks.\n"
+            reply += "3. **Vitamin D (25-OH)**: Controls bone density, calcium absorption, and immune response. Target levels are 30–100 ng/mL. Deficiencies are highly common and can impact overall mood and muscle recovery.\n"
+            reply += "4. **Blood Pressure**: Measures the force of blood flow on arterial walls. Normal values are under 120/80 mmHg. Managing this reduces long-term cardiac strain.\n\n"
+            reply += "**Next Steps**: Consult the interactive **Analytics** page to track how these values are trending over time, and download the formatted PDF to share with your primary care provider."
+
+        # 2. Blood Pressure Check
+        elif "blood pressure" in msg or "bp" in msg or "pressure" in msg:
+            reply += "### 🩸 Blood Pressure Clinical Reference Guide:\n"
+            reply += "Blood pressure measures the systolic pressure (arterial force when the heart beats) over diastolic pressure (force when the heart rests):\n\n"
+            reply += "* **Normal**: Less than 120/80 mmHg\n"
+            reply += "* **Elevated**: 120-129 / <80 mmHg\n"
+            reply += "* **Hypertension (Stage 1)**: 130-139 / 80-89 mmHg\n"
+            reply += "* **Hypertension (Stage 2)**: 140/90 mmHg or higher\n\n"
+            reply += "**Actionable Wellness Suggestions to Improve Blood Pressure:**\n"
+            reply += "* **Manage Dietary Sodium**: Aim to consume less than 2,300 mg of sodium daily, focusing on fresh vegetables and home-cooked meals.\n"
+            reply += "* **Incorporate Aerobic Exercise**: Engage in 30 minutes of moderate cardiovascular activities (like brisk walking or swimming) 5 times a week.\n"
+            reply += "* **Stress Reduction**: Implement daily deep breathing exercises, mindfulness meditation, or yoga to lower arterial stress hormones.\n"
+            reply += "* **Limit Stimulants**: Moderate caffeine and alcohol consumption to avoid transient arterial spikes."
+
+        # 3. Vitamin D Improvement
+        elif "vitamin d" in msg or "vit d" in msg or "improve vitamin" in msg:
+            reply += "### ☀️ Vitamin D Improvement & Action Plan:\n"
+            reply += "Vitamin D is synthesized by your skin when exposed to UV light, or absorbed through dietary sources. Standard healthy levels range between 30 and 100 ng/mL:\n\n"
+            reply += "**Actionable Wellness Suggestions to Improve Vitamin D:**\n"
+            reply += "* **Safe Sun Exposure**: Spend 10 to 15 minutes in direct morning sunlight (arms and face exposed) without sunscreen daily.\n"
+            reply += "* **D3 Supplementation**: Discuss starting a Vitamin D3 supplement (e.g. 1,000 to 2,000 IU daily) with your physician, particularly during winter months.\n"
+            reply += "* **Dietary Intake**: Focus on foods rich in Vitamin D, including fatty fish (salmon, mackerel, sardines), beef liver, egg yolks, and fortified cereals or milk.\n"
+            reply += "* **Co-Factor Support**: Ensure adequate magnesium and Vitamin K2 intake, as they assist in activating and directing calcium into the bones."
+
+        # 4. Fasting Glucose / Blood Sugar Check
+        elif "glucose" in msg or "sugar" in msg or "fasting" in msg:
+            reply += "### 🍬 Fasting Glucose General Effects & Reference Guide:\n"
+            reply += "Fasting glucose measures the concentration of sugar in your bloodstream after an 8-12 hour fast. Reference levels:\n\n"
+            reply += "* **Normal**: 70 to 100 mg/dL\n"
+            reply += "* **Prediabetes**: 101 to 125 mg/dL (indicates insulin resistance)\n"
+            reply += "* **Diabetes range**: 126 mg/dL or higher\n\n"
+            reply += "**General Physiological Effects of Elevated Fasting Sugar:**\n"
+            reply += "* **Fatigue**: Fluctuating glucose causes energy highs followed by sudden crashes.\n"
+            reply += "* **Vascular Strain**: Excess bloodstream glucose can place stress on vascular linings.\n\n"
+            reply += "**Actionable Wellness Suggestions to Stabilize Glucose:**\n"
+            reply += "* **Rebalance Carbohydrates**: Minimize simple sugars, refined flours, and sweet sodas. Swap them for complex, fiber-rich options like legumes, oats, and whole grains.\n"
+            reply += "* **Post-Meal Walks**: Try taking a brisk 10 to 15-minute walk immediately after your largest meals to assist muscles in directly absorbing glucose from the bloodstream.\n"
+            reply += "* **Hydrate with Water**: Proper hydration assists your kidneys in flushing excess sugar through urination.\n"
+            reply += "* **Support Sleep Quality**: Chronic sleep deprivation raises cortisol levels, which raises blood sugar."
+
+        # Default fallback
         else:
             reply += "I can help explain specific parameters in your report. I detected metrics relating to: **Fasting Glucose**, **Hemoglobin**, **Cholesterol**, **Vitamin D**, and **Blood Pressure** in the active context.\n\n"
-            reply += "Please ask me about any of these indicators, and I will explain what they represent and outline wellness suggestions!"
+            reply += "Please ask me about any of these indicators (e.g. *'Explain my overall reports'*, *'Check my Blood Pressure'*, *'How to improve Vitamin D'*, or *'Fasting Glucose query'*), and I will explain what they represent and outline wellness suggestions!"
 
         reply += "\n\n***\n*Disclaimer: MedIntel AI insights are for informational support only and do not replace professional medical advice. Always consult your primary care doctor for diagnostics and treatment plans.*"
         return reply
