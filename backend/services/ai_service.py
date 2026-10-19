@@ -5,7 +5,7 @@ import google.generativeai as genai
 class AIService:
     def __init__(self):
         self.api_key_configured = False
-        self.model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
         self._configure_api()
 
     def _configure_api(self):

@@ -24,7 +24,7 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
-        value: gemini-1.5-flash
+        value: gemini-flash-latest
 
   # =========================================================
   # MedIntel AI - Frontend Static Site (React + Vite)
