@@ -18,16 +18,25 @@ def create_app():
 
     # Configuration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'medintel-secret-key-change-in-prod')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///medintel.db')
+    
+    # Render PostgreSQL compatibility (postgres:// -> postgresql://)
+    db_url = os.getenv('DATABASE_URL', 'sqlite:///medintel.db')
+    if db_url and db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['UPLOAD_FOLDER'] = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads')
+
+    # Ensure uploads folder exists
+    upload_folder = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    app.config['UPLOAD_FOLDER'] = upload_folder
     
     # JWT configuration
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'medintel-jwt-secret-key-change-in-prod')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
     # Initialize extensions
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*"}})
     db.init_app(app)
     
     jwt = JWTManager(app)
@@ -57,14 +66,24 @@ def create_app():
     def my_unauthorized_token_callback(error_string):
         return jsonify({'error': 'Missing authentication token'}), 401
 
-    # Base probe test
+    # Base probe and health check routes
+    @app.route('/', methods=['GET'])
+    def root():
+        return jsonify({
+            'status': 'healthy',
+            'service': 'MedIntel AI API',
+            'version': '1.0.0'
+        }), 200
+
     @app.route('/health', methods=['GET'])
     def health_check():
         return jsonify({'status': 'healthy', 'message': 'MedIntel AI API active'}), 200
 
     return app
 
+# Expose app for WSGI servers like Gunicorn (e.g., `gunicorn app:app`)
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
     port = int(os.getenv('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=False)

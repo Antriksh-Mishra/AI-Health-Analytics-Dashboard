@@ -1,0 +1,49 @@
+services:
+  # =========================================================
+  # MedIntel AI - Backend Web Service (Flask + Gunicorn)
+  # =========================================================
+  - type: web
+    name: medintel-backend
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "gunicorn --chdir backend app:app --workers 2 --timeout 120"
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///medintel.db
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+
+  # =========================================================
+  # MedIntel AI - Frontend Static Site (React + Vite)
+  # =========================================================
+  - type: web
+    name: medintel-frontend
+    runtime: static
+    plan: free
+    region: oregon
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: frontend/dist
+    routes:
+      # Single-Page Application (SPA) rewrite rule for React Router
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: medintel-backend
+          envVarKey: RENDER_EXTERNAL_URL

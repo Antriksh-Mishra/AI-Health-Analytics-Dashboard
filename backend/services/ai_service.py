@@ -5,6 +5,7 @@ import google.generativeai as genai
 class AIService:
     def __init__(self):
         self.api_key_configured = False
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
         self._configure_api()
 
     def _configure_api(self):
@@ -57,7 +58,7 @@ Raw Extract Text Content:
 {raw_text}
 """
         try:
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            model = genai.GenerativeModel(self.model_name)
             response = model.generate_content(prompt, request_options={"timeout": 10.0})
             text_response = response.text.strip()
             
@@ -102,7 +103,7 @@ Conversation History:
 User: {user_message}
 Assistant:"""
         try:
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            model = genai.GenerativeModel(self.model_name)
             response = model.generate_content(prompt, request_options={"timeout": 10.0})
             return response.text.strip()
         except Exception as e:
@@ -319,7 +320,7 @@ Write a patient-friendly comparative progress summary (2-3 paragraphs max). Deta
 3. Keep the tone clinical, supportive, and non-diagnostic. Emphasize doctor consult for treatment changes.
 """
         try:
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            model = genai.GenerativeModel(self.model_name)
             response = model.generate_content(prompt, request_options={"timeout": 10.0})
             return response.text.strip()
         except Exception as e:

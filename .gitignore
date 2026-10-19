@@ -36,3 +36,7 @@ backend/uploads/
 *.njsproj
 *.sln
 *.sw?
+
+# Backups and archives
+.landguard_backup/
+*.zip
